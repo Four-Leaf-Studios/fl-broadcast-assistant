@@ -10,4 +10,6 @@ Download URL: https://drive.google.com/file/d/17uR0NaaIkKKGvAXo_Uc80ZZE486BFwYC/
 Designed in figma and confirmed by Florida Tech for stream useage. Programmed a svelte application to receive team configuration from the broadcast assistant and receive game information from the websocket server in the game. Utilizes css to display the overlays for the stream.      
 
 GitHub URL: https://github.com/MichaelHeinzman/florida-tech-rl-overlay      
-Overlay URL: https://florida-tech-rl-overlay-ch7sgx0s1-michaelheinzman.vercel.app/     
+Overlay URL: https://florida-tech-rl-overlay-ch7sgx0s1-michaelheinzman.vercel.app/       
+
+VIEW IT IN ACTION: https://www.twitch.tv/fltechesports   
