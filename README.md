@@ -12,4 +12,4 @@ Designed in figma and confirmed by Florida Tech for stream useage. Programmed a 
 GitHub URL: https://github.com/MichaelHeinzman/florida-tech-rl-overlay      
 Overlay URL: https://florida-tech-rl-overlay-ch7sgx0s1-michaelheinzman.vercel.app/       
 
-VIEW IT IN ACTION: https://www.twitch.tv/fltechesports   
+VIEW IT IN ACTION (CLICK A ROCKET LEAGUE VOD): https://www.twitch.tv/fltechesports   
