@@ -15,9 +15,9 @@ Overlay URL: https://florida-tech-rl-overlay-ch7sgx0s1-michaelheinzman.vercel.ap
 VIEW IT IN ACTION (CLICK A ROCKET LEAGUE VOD): https://www.twitch.tv/fltechesports   
 
 
-## How to use and setup
+# How to use and setup
 
-# Installation Setup
+## Installation Setup
 1. Install bakkes mod. [Instructions Here](https://www.bakkesmod.com/download.php)
 3. Install Four Leaf Studios RL Overlay Control Panel [Click Here](https://drive.google.com/file/d/13-PUD_8_Qfye1ALc85zgPBA0acGou07n/view?usp=sharing)
 4. Download the SOS Plugins folder, unzip and double click the install_plugins batch file. [Click Here](https://drive.google.com/drive/folders/1VYJULJ3TfM7yIq5re9gLWHmovzEEtcP6?usp=sharing)
@@ -25,7 +25,7 @@ VIEW IT IN ACTION (CLICK A ROCKET LEAGUE VOD): https://www.twitch.tv/fltechespor
 6. Enter rocket league, go to bakkesmod plugins, plugin manager, SOS should be in the list of plugins.
 7. Enable the SOS plugin by clicking checkbox.
 
-# Stream Setup
+## Stream Setup
 1. Start the Four Leaf Studios RL Overlay Control Panel
 2. Copy the vercel florida tech overlay link (DO NOT CLICK, I MESSED UP THE LINK WHEN CLICKING TO COPY, but the one showing is correct).
 3. Place the link inside a browser source on the stream. You may want to click restart when exiting and entering scene.
