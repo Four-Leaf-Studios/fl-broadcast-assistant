@@ -4,8 +4,6 @@ Note: You must have Rocket League Bakkesmod and the Bakkesmod SOS plugin for roc
 # Assistant   
 Built using Tauri + Next.js. Runs a rust websocket server on a seperate thread for the overlay to connect and receive team configuration.     
 
-Download URL: https://drive.google.com/file/d/17uR0NaaIkKKGvAXo_Uc80ZZE486BFwYC/view?usp=drive_link      
-
 # Overlay
 Designed in figma and confirmed by Florida Tech for stream useage. Programmed a svelte application to receive team configuration from the broadcast assistant and receive game information from the websocket server in the game. Utilizes css to display the overlays for the stream.      
 
