@@ -4,7 +4,6 @@ permissions:
   packages: write
   issues: read
   pull-requests: write
-  releases: write
   
 on:
   push:
