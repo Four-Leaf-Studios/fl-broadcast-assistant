@@ -1,0 +1,49 @@
+name: Bug Label Action
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  add-bug-prefix:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Add BUG Prefix
+      run: |
+        import requests
+        import os
+        import json
+
+        token = os.environ['GITHUB_TOKEN']
+        headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
+
+        issue_number = json.loads(os.environ['GITHUB_CONTEXT'])['issue']['number']
+        repo = json.loads(os.environ['GITHUB_CONTEXT'])['repository']
+        
+        issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
+        issues_api_url = f"https://api.github.com/repos/{repo}/issues?labels=bug&state=open"
+
+        # Fetch the issue details
+        issue_response = requests.get(issue_api_url, headers=headers).json()
+        
+        # Check if the issue has a 'bug' label
+        if 'bug' in [label['name'].lower() for label in issue_response['labels']]:
+            # Count current open bugs
+            count_response = requests.get(issues_api_url, headers=headers).json()
+            bug_count = len(count_response) + 1
+
+            # Update issue title
+            new_title = f"BUG {bug_count}: {issue_response['title']}"
+            update_data = {'title': new_title}
+            requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
+
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
