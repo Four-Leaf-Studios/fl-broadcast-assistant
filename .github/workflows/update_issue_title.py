@@ -38,3 +38,7 @@ if label == 'bug':
     if new_title != issue_title:
         update_data = {'title': new_title}
         requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
+        response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
+        print(response.status_code)
+        print(response.json())
+
