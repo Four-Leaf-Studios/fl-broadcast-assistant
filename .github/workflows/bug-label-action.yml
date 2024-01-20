@@ -28,25 +28,25 @@ jobs:
 
         issue_number = json.loads(os.environ['GITHUB_CONTEXT'])['issue']['number']
         repo = json.loads(os.environ['GITHUB_CONTEXT'])['repository']
-        label = github.event.label.name.lower()
+        label = json.loads(os.environ['GITHUB_CONTEXT'])['event']['label']['name'].lower()
 
         issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
-        issues_api_url = f"https://api.github.com/repos/{repo}/issues?labels=bug&state=open"
 
         # Fetch the issue details
         issue_response = requests.get(issue_api_url, headers=headers).json()
         issue_title = issue_response['title']
 
         if label == 'bug':
-            if 'labeled' in github.event.action:
+            if json.loads(os.environ['GITHUB_CONTEXT'])['event']['action'] == 'labeled':
                 # Add BUG prefix if not already present
                 if not issue_title.startswith('BUG'):
                     # Count current open bugs
-                    count_response = requests.get(issues_api_url, headers=headers).json()
-                    bug_count = len(count_response) + 1
+                    search_api_url = f"https://api.github.com/search/issues?q=repo:{repo}+label:bug+state:open"
+                    search_response = requests.get(search_api_url, headers=headers).json()
+                    bug_count = search_response['total_count']
 
                     # Format the bug count as a four-digit number
-                    bug_number = f"BUG{bug_count:04d}"
+                    bug_number = f"BUG{bug_count + 1:04d}"
                     new_title = f"{bug_number}: {issue_title}"
             else:
                 # Remove BUG prefix if present
