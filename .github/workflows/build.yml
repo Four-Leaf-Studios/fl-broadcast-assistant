@@ -1,9 +1,10 @@
 name: App Builder
 permissions:
-  contents: read
+  contents: write
   packages: write
   issues: read
   pull-requests: write
+  releases: write
   
 on:
   push:
