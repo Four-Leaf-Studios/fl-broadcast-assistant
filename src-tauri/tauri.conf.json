@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "florida-tech-broadcast-tool",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "tauri": {
     "allowlist": {
@@ -53,7 +53,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://sheltered-sands-63876-5088b4ef95ee.herokuapp.com/fl-broadcast-assistant/{{target}}/{{arch}}/{{current_version}}"
+        "https://sheltered-sands-63876-5088b4ef95ee.herokuapp.com/handle_tauri_releases/fl-broadcast-assistant/{{target}}/{{current_version}}"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUwRDAyNkEwQUNBNzdFRTkKUldUcGZxZXNvQ2JRVUVXVTRNY0dFYlAxRzRGQ1lIdXVLczBNYTV0YTFPZWVSWGNhWWliUkFYeWcK"
