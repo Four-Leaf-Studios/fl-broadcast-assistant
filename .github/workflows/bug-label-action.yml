@@ -5,7 +5,7 @@ permissions:
   packages: write
   issues: read
   pull-requests: write
-  
+
 on:
   issues:
     types: [labeled, unlabeled]
@@ -21,6 +21,9 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
+    - name: Install Python Dependencies
+      run: pip install requests
 
     - name: Update Issue Title
       run: python .github/workflows/update_issue_title.py
