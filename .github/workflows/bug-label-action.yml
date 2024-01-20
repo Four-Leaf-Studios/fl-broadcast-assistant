@@ -1,5 +1,11 @@
 name: Bug Label Action
 
+permissions:
+  contents: write
+  packages: write
+  issues: read
+  pull-requests: write
+  
 on:
   issues:
     types: [labeled, unlabeled]
