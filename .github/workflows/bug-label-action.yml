@@ -2,12 +2,11 @@ name: Bug Label Action
 
 on:
   issues:
-    types: [labeled]
+    types: [labeled, unlabeled]
 
 jobs:
-  add-bug-prefix:
+  update-bug-prefix:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'bug')
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -17,37 +16,47 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Add BUG Prefix
+    - name: Update Issue Title
       run: |
         import requests
         import os
         import json
+        import re
 
         token = os.environ['GITHUB_TOKEN']
         headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
 
         issue_number = json.loads(os.environ['GITHUB_CONTEXT'])['issue']['number']
         repo = json.loads(os.environ['GITHUB_CONTEXT'])['repository']
-        
+        label = github.event.label.name.lower()
+
         issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
         issues_api_url = f"https://api.github.com/repos/{repo}/issues?labels=bug&state=open"
 
         # Fetch the issue details
         issue_response = requests.get(issue_api_url, headers=headers).json()
-        
-        # Check if the issue has a 'bug' label and not already prefixed
-        if 'bug' in [label['name'].lower() for label in issue_response['labels']] and not issue_response['title'].startswith('BUG'):
-            # Count current open bugs
-            count_response = requests.get(issues_api_url, headers=headers).json()
-            bug_count = len(count_response) + 1
+        issue_title = issue_response['title']
 
-            # Format the bug count as a four-digit number
-            bug_number = f"BUG{bug_count:04d}"
+        if label == 'bug':
+            if 'labeled' in github.event.action:
+                # Add BUG prefix if not already present
+                if not issue_title.startswith('BUG'):
+                    # Count current open bugs
+                    count_response = requests.get(issues_api_url, headers=headers).json()
+                    bug_count = len(count_response) + 1
 
-            # Update issue title
-            new_title = f"{bug_number}: {issue_response['title']}"
-            update_data = {'title': new_title}
-            requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
+                    # Format the bug count as a four-digit number
+                    bug_number = f"BUG{bug_count:04d}"
+                    new_title = f"{bug_number}: {issue_title}"
+            else:
+                # Remove BUG prefix if present
+                if issue_title.startswith('BUG'):
+                    new_title = re.sub(r'^BUG\d{4}: ', '', issue_title)
+
+            # Update issue title if changed
+            if new_title != issue_title:
+                update_data = {'title': new_title}
+                requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
