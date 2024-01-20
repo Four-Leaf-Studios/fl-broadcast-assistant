@@ -8,7 +8,7 @@ type Props = {};
 const Instructions = (props: Props) => {
   const [copy, setCopy] = useState(false);
   const copyLinkToClipboard = () => {
-    const linkToCopy = "https://rl-broadcast-overlay-woad.vercel.app/";
+    const linkToCopy = "https://florida-tech-rl-overlay.vercel.app/";
 
     navigator.clipboard
       .writeText(linkToCopy)
