@@ -1,10 +1,16 @@
 name: App Builder
+permissions:
+  contents: read
+  packages: write
+  issues: read
+  pull-requests: write
+  
 on:
   push:
     tags:
       - "v*"
   workflow_dispatch:
-
+  
 jobs:
   release:
     strategy:
