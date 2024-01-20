@@ -103,6 +103,12 @@ const Instructions = (props: Props) => {
           THAT IS IT! ENJOY :P
         </span>
       </div>
+      <div className="w-full h-fit flex flex-col justify-start items-start gap-2">
+        <span className="text-lg text-left text-white">
+          This app now handles updates, so you always have the freshest
+          application around the block
+        </span>
+      </div>
     </>
   );
 };
