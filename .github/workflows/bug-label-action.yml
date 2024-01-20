@@ -29,3 +29,7 @@ jobs:
       run: python .github/workflows/update_issue_title.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        REPOSITORY: ${{ github.repository }}
+        ISSUE_LABEL: ${{ github.event.label.name }}
+        EVENT_ACTION: ${{ github.event.action }}
