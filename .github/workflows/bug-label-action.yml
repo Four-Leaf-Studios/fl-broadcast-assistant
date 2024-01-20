@@ -1,10 +1,9 @@
 name: Bug Label Action
 
 permissions:
-  contents: write
-  packages: write
-  issues: read
-  pull-requests: write
+  contents: read
+  issues: write
+
 
 on:
   issues:
