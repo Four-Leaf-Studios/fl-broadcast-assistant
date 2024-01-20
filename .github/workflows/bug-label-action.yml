@@ -2,11 +2,12 @@ name: Bug Label Action
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [labeled]
 
 jobs:
   add-bug-prefix:
     runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'bug')
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -34,14 +35,17 @@ jobs:
         # Fetch the issue details
         issue_response = requests.get(issue_api_url, headers=headers).json()
         
-        # Check if the issue has a 'bug' label
-        if 'bug' in [label['name'].lower() for label in issue_response['labels']]:
+        # Check if the issue has a 'bug' label and not already prefixed
+        if 'bug' in [label['name'].lower() for label in issue_response['labels']] and not issue_response['title'].startswith('BUG'):
             # Count current open bugs
             count_response = requests.get(issues_api_url, headers=headers).json()
             bug_count = len(count_response) + 1
 
+            # Format the bug count as a four-digit number
+            bug_number = f"BUG{bug_count:04d}"
+
             # Update issue title
-            new_title = f"BUG {bug_count}: {issue_response['title']}"
+            new_title = f"{bug_number}: {issue_response['title']}"
             update_data = {'title': new_title}
             requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
 
