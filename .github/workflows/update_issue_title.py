@@ -6,9 +6,10 @@ import re
 token = os.environ['GITHUB_TOKEN']
 headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
 
-issue_number = json.loads(os.environ['GITHUB_CONTEXT'])['issue']['number']
-repo = json.loads(os.environ['GITHUB_CONTEXT'])['repository']
-label = json.loads(os.environ['GITHUB_CONTEXT'])['event']['label']['name'].lower()
+issue_number = os.environ['ISSUE_NUMBER']
+repo = os.environ['REPOSITORY']
+label = os.environ['ISSUE_LABEL'].lower()
+event_action = os.environ['EVENT_ACTION']
 
 issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
 
