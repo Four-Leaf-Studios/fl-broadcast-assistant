@@ -23,6 +23,6 @@ jobs:
         python-version: '3.x'
 
     - name: Update Issue Title
-      run: python workflows/update_issue_title.py
+      run: python .github/workflows/update_issue_title.py
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
