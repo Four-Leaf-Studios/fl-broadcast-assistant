@@ -18,7 +18,7 @@ issue_response = requests.get(issue_api_url, headers=headers).json()
 issue_title = issue_response['title']
 
 if label == 'bug':
-    if json.loads(os.environ['GITHUB_CONTEXT'])['event']['action'] == 'labeled':
+    if event_action == "labeled":
         # Add BUG prefix if not already present
         if not issue_title.startswith('BUG'):
             # Count current open bugs
