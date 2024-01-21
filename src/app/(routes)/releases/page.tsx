@@ -17,9 +17,10 @@ const Releases = async () => {
     <>
       <h1 className="text-3xl">Releases</h1>
       <ul className="flex flex-col gap-5">
-        {releases?.map((release: any) => (
-          <Release key={release?.id} {...release} />
-        ))}
+        {releases?.length > 0 &&
+          releases?.map((release: any) => (
+            <Release key={release?.id} {...release} />
+          ))}
       </ul>
     </>
   );
