@@ -7,14 +7,14 @@ type Props = {};
 
 const page = async (props: Props) => {
   return (
-    <div className="h-[1000px] w-full text-white text-xl font-bold flex flex-col gap-4">
-      <span>Scorebug</span>
+    <>
+      <h1 className="text-3xl">Scorebug</h1>
 
       <GeneralConfiguration />
 
       <SeriesConfiguration />
       <TeamsConfiguration />
-    </div>
+    </>
   );
 };
 

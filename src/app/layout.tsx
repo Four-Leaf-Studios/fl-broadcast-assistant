@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ConfigProvider } from "@/components/providers/config-provider";
-import IsConnectedToOverlay from "@/components/is-connected/is-connected-to-overlay";
+import { WebSocketStatusProvider } from "@/components/providers/websocket-status-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +21,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ConfigProvider>
-          <Navbar />
-          <div className="w-full h-fit pl-[215px] py-4 pr-4 flex flex-col gap-4">
-            <div className="w-full flex h-fit gap-2">
-              <IsConnectedToOverlay />
+          <WebSocketStatusProvider>
+            <Navbar />
+            <div className="w-full h-fit pl-[215px] py-4 pr-4 flex flex-col gap-4 bg-gray-900 ">
+              <div className="w-full flex h-fit gap-2"></div>
+              <div className="min-h-screen w-ful p-3 rounded-sm flex flex-col gap-4 text-white">
+                {children}
+              </div>
             </div>
-            {children}
-          </div>
+          </WebSocketStatusProvider>
         </ConfigProvider>
       </body>
     </html>

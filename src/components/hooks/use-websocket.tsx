@@ -3,6 +3,7 @@ import { useConfig } from "./use-config";
 
 function useWebSocket(port: number) {
   const { config } = useConfig();
+  const [on, setOn] = useState(true);
   const [connected, setConnected] = useState(false);
   const [websocket, setWebsocket] = useState<WebSocket | null>(null);
   const [waitingToReconnect, setWaitingToReconnect] = useState(false);
@@ -52,30 +53,33 @@ function useWebSocket(port: number) {
     [waitingToReconnect]
   );
 
-  console.log("WAITING TO RECONNECT", waitingToReconnect);
-  useEffect(() => {
-    const initialize = () => {};
-    // Construct the WebSocket URL with the specified port
-    const url = `ws://localhost:${port}`;
-
-    // Initialize WebSocket connection
-    const newWebSocket = new WebSocket(url);
-
-    // Set up event handlers for WebSocket
-    newWebSocket.onopen = onOpen;
-    newWebSocket.onmessage = onMessage;
-    newWebSocket.onclose = onClose;
-    newWebSocket.onerror = onError;
-
-    setWebsocket(newWebSocket);
-    return () => {
-      newWebSocket.close();
-      setWebsocket(null);
-    };
-  }, [port, onOpen, onMessage, onClose, onError, waitingToReconnect]);
+  const disable = () => setOn(false);
+  const enable = () => setOn(true);
 
   useEffect(() => {
-    if (websocket && websocket.readyState === WebSocket.OPEN && config) {
+    if (on) {
+      // Construct the WebSocket URL with the specified port
+      const url = `ws://localhost:${port}`;
+
+      // Initialize WebSocket connection
+      const newWebSocket = new WebSocket(url);
+
+      // Set up event handlers for WebSocket
+      newWebSocket.onopen = onOpen;
+      newWebSocket.onmessage = onMessage;
+      newWebSocket.onclose = onClose;
+      newWebSocket.onerror = onError;
+
+      setWebsocket(newWebSocket);
+      return () => {
+        newWebSocket.close();
+        setWebsocket(null);
+      };
+    }
+  }, [port, onOpen, onMessage, onClose, onError, waitingToReconnect, on]);
+
+  useEffect(() => {
+    if (on && websocket && websocket.readyState === WebSocket.OPEN && config) {
       console.log("SENDING CONFIG TO OVERLAY", config);
       // Assuming config is an object, you can send it as a JSON string
       const payload = JSON.stringify({
@@ -84,9 +88,16 @@ function useWebSocket(port: number) {
       });
       websocket?.send(payload);
     }
-  }, [config, websocket, noConfig]);
+  }, [config, websocket, noConfig, on]);
 
-  return { connected };
+  return {
+    connected,
+    disable,
+    enable,
+    on,
+    waitingToReconnect,
+    reconnecting: on && !connected,
+  };
 }
 
 export default useWebSocket;

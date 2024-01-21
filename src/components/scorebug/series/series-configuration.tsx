@@ -28,7 +28,7 @@ const SeriesConfiguration = (props: Props) => {
   };
 
   return (
-    <div className="bg-gray-900 p-3 rounded-sm text-base font-normal flex flex-col gap-4">
+    <div className="bg-gray-900 rounded-sm text-base font-normal flex flex-col gap-4">
       <span className="">SeriesConfiguration</span>
       <input
         className="bg-[#2A3038] p-2 rounded-sm w-fit"

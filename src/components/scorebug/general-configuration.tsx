@@ -5,7 +5,7 @@ import { useConfig } from "../hooks/use-config";
 const GeneralConfiguration = () => {
   const { swapTeams, resetColors } = useConfig();
   return (
-    <div className="bg-gray-900 p-3 rounded-sm text-base font-normal flex flex-col justify-start items-start gap-4">
+    <div className="bg-gray-900 rounded-sm text-base font-normal flex flex-col justify-start items-start gap-4">
       <span className="">General Configuration</span>
       <div className="flex justify-center items-center text-base font-normal gap-4">
         <button

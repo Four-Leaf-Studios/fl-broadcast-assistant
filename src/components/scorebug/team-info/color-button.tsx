@@ -1,7 +1,6 @@
 import { useConfig } from "@/components/hooks/use-config";
-import { hexToRgb, rgbToHsv } from "@/lib/utils";
 import React, { useState, useEffect, useRef } from "react";
-import { ColorPicker, useColor, IColor } from "react-color-palette";
+import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
 type Props = {

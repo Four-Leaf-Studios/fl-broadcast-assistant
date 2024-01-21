@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import TeamConfiguration from "./team-configuration";
-import { useConfig } from "../../hooks/use-config";
 
 type Props = {};
 

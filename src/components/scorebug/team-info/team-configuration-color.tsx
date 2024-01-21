@@ -1,7 +1,6 @@
 import React from "react";
 import "react-color-palette/css";
 import ColorButton from "./color-button";
-import { useConfig } from "@/components/hooks/use-config";
 
 type Props = {
   team: number;

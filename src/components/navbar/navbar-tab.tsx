@@ -1,20 +1,39 @@
+import { TablerIconsProps } from "@tabler/icons-react";
 import Link from "next/link";
-import React from "react";
+import React, { FunctionComponent } from "react";
 
 type Props = {
-  icon: React.ReactNode;
+  icon: FunctionComponent<TablerIconsProps>;
   title: string;
   link: string;
+  classes?: string;
+  selected: boolean;
+  setSelected: () => void;
 };
 
-const NavbarTab = ({ icon, title, link }: Props) => {
+const NavbarTab = ({
+  icon: Icon,
+  title,
+  link,
+  classes,
+  selected,
+  setSelected,
+}: Props) => {
   return (
-    <Link href={link} className="w-full flex justify-start items-center gap-2">
-      <div className="w-8 h-8 rounded-full bg-[#292C39] flex justify-center items-center">
-        {icon}
-      </div>
-      <span>{title}</span>
-    </Link>
+    <>
+      <Link
+        href={link}
+        onClick={setSelected}
+        className={`w-full flex justify-left items-center gap-2 ${
+          selected && title !== "Status" ? "text-white" : "text-gray-400"
+        } ${title === "Status" && classes}`}
+      >
+        <div className="w-8 h-8 rounded-full bg-[#292C39] flex justify-center items-center">
+          <Icon className={classes ? classes : ""} />
+        </div>
+        <span>{title}</span>
+      </Link>
+    </>
   );
 };
 

@@ -1,15 +1,78 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import NavbarTab from "./navbar-tab";
-import { IconScoreboard, IconHomeHeart } from "@tabler/icons-react";
+import {
+  IconScoreboard,
+  IconHomeHeart,
+  IconNotebook,
+  IconServer,
+  IconPencil,
+  IconNotes,
+} from "@tabler/icons-react";
+import { useWebSocketStatus } from "../providers/websocket-status-provider";
 
 type Props = {};
 
 const NavbarTabs = (props: Props) => {
+  const [selected, setSelected] = useState("Home");
+  const status = useWebSocketStatus();
+  const tabs = [
+    {
+      title: "Home",
+      icon: IconHomeHeart,
+      link: "/",
+      classes: "text-white",
+    },
+    {
+      title: "Instructions",
+      icon: IconNotebook,
+      link: "/instructions",
+      classes: "text-",
+    },
+    {
+      title: "Scorebug",
+      icon: IconScoreboard,
+      link: "/scorebug",
+      classes: "text-orange-500",
+    },
+    {
+      title: "Customization",
+      icon: IconPencil,
+      link: "/customization",
+      classes: "text-blue-400",
+    },
+
+    {
+      title: "Releases",
+      icon: IconNotes,
+      link: "/releases",
+      classes: "text-sky-200",
+    },
+    {
+      title: "Status",
+      icon: IconServer,
+      link: "/status",
+      classes: `${
+        status?.on && status?.reconnecting
+          ? "text-yellow-400"
+          : status?.connected
+          ? "text-green-400"
+          : status?.waitingToReconnect
+          ? "text-yellow-400"
+          : "text-red-400"
+      }`,
+    },
+  ];
   return (
-    <div className="w-full h-fit flex flex-col items-start gap-4 text-sm text-gray-300">
-      <span className="">Navigation</span>
-      <NavbarTab icon={<IconHomeHeart />} title="Home" link="/" />
-      <NavbarTab icon={<IconScoreboard />} title="Scorebug" link="/scorebug" />
+    <div className="w-full h-fit flex flex-col items-start gap-4 text-sm text-gray-300 p-2">
+      {tabs.map((tab) => (
+        <NavbarTab
+          key={tab.title}
+          {...tab}
+          selected={tab.title === selected}
+          setSelected={() => setSelected(tab.title)}
+        />
+      ))}
     </div>
   );
 };

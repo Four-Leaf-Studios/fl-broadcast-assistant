@@ -16,7 +16,7 @@ const TeamConfiguration = ({ team }: Props) => {
   const color = isBlue ? "bg-blue-500" : "bg-orange-500";
 
   return (
-    <div className="col-span-2 md:col-span-1 min-h-[500px] bg-gray-900 p-3 rounded-sm flex flex-col gap-4">
+    <div className="col-span-2 md:col-span-1 min-h-[500px] bg-gray-900 rounded-sm flex flex-col gap-4">
       <div className="w-full h-fit flex justify-start items-center gap-3">
         <div
           className={cn(
