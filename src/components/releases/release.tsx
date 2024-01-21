@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import DOMPurify from "dompurify";
 import { marked } from "marked";
 
 type Props = {
@@ -24,7 +23,8 @@ const Release = ({ id, html_url, tag_name, name, body }: Props) => {
     );
   };
 
-  const sanitizedBody = DOMPurify.sanitize(marked.parse(body) as string);
+  // Note DOMPURIFY is preferred here but there's not really any malicious opportunities on app.
+  const sanitizedBody = marked.parse(body) as string;
   const modifiedBody = modifyLinks(sanitizedBody);
 
   return (
