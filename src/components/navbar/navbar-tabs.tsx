@@ -10,11 +10,12 @@ import {
   IconNotes,
 } from "@tabler/icons-react";
 import { useWebSocketStatus } from "../providers/websocket-status-provider";
+import { useCurrentPage } from "../providers/current-page-provider";
 
 type Props = {};
 
 const NavbarTabs = (props: Props) => {
-  const [selected, setSelected] = useState("Home");
+  const { currentPage, setCurrentPage } = useCurrentPage();
   const status = useWebSocketStatus();
   const tabs = [
     {
@@ -69,8 +70,8 @@ const NavbarTabs = (props: Props) => {
         <NavbarTab
           key={tab.title}
           {...tab}
-          selected={tab.title === selected}
-          setSelected={() => setSelected(tab.title)}
+          selected={tab.title === currentPage}
+          setSelected={() => setCurrentPage(tab.title)}
         />
       ))}
     </div>

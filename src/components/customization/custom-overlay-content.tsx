@@ -4,10 +4,9 @@ import CustomChild from "./custom-child";
 
 const CustomOverlayContent = ({ id, name, children, css }: TCustomOverlay) => {
   return (
-    <div>
-      <h4>Children</h4>
+    <div className="flex flex-col gap-5">
       {children.map((child: Child) => (
-        <CustomChild key={child.id} />
+        <CustomChild key={child.id} child={child} />
       ))}
     </div>
   );

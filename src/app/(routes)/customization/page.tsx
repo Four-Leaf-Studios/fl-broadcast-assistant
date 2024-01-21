@@ -1,5 +1,6 @@
 "use client";
 import CustomOverlay from "@/components/customization/custom-overlay";
+import Header from "@/components/header";
 import React, { useState } from "react";
 
 type Props = {};
@@ -24,14 +25,19 @@ const Customization = (props: Props) => {
     {
       id: "123456",
       name: "Custom Overlay 1",
-      children: [{ id: "123456", name: "Photo", content: "" }],
+      children: [
+        { id: "123456", name: "Best Of", content: "" },
+        { id: "123456", name: "Team Score", content: "" },
+        { id: "123456", name: "Team Boost", content: "" },
+        { id: "123456", name: "Player Boost", content: "" },
+        { id: "123456", name: "Player Card", content: "" },
+      ],
       css: "",
     },
   ]);
 
   return (
     <>
-      <h1 className="text-3xl">Customization</h1>
       {customOverlays.map((overlay) => (
         <CustomOverlay key={overlay.id} {...overlay} />
       ))}

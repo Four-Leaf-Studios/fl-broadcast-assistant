@@ -15,7 +15,6 @@ const Releases = async () => {
   if (!releases) return unableToFetchReleases();
   return (
     <>
-      <h1 className="text-3xl">Releases</h1>
       <ul className="flex flex-col gap-5">
         {releases?.length > 0 &&
           releases?.map((release: any) => (

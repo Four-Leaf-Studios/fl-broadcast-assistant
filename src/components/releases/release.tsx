@@ -30,7 +30,7 @@ const Release = ({ id, html_url, tag_name, name, body }: Props) => {
   return (
     <li
       onClick={toggleOpen}
-      className="bg-gray-950 p-3 rounded-md cursor-pointer"
+      className="bg-gray-800 p-3 rounded-md cursor-pointer"
     >
       <div className="flex justify-between items-center">
         <a href={html_url} target="_blank" rel="noopener noreferrer">
@@ -40,7 +40,7 @@ const Release = ({ id, html_url, tag_name, name, body }: Props) => {
       </div>
 
       <p
-        className={`text-gray-400 transition-opacity py-5 ${
+        className={`text-gray-300 transition-opacity py-5 ${
           open ? "h-fit opacity-100" : "h-0 opacity-0"
         }`}
         dangerouslySetInnerHTML={{ __html: modifiedBody }}

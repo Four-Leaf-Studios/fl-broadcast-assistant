@@ -28,7 +28,6 @@ const Status = (props: Props) => {
 
   return (
     <>
-      <h1 className="text-3xl">WebSocket Status</h1>
       <p className="text-gray-200">
         When turning off server, you will need to refresh the browser source so
         that it connects again to configure the teams. When disconnecting it
