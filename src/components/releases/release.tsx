@@ -4,11 +4,11 @@ import DOMPurify from "dompurify";
 import { marked } from "marked";
 
 type Props = {
-  id: string;
-  html_url: string;
-  name: string;
-  tag_name: string;
-  body: any;
+  id?: string;
+  html_url?: string;
+  name?: string;
+  tag_name?: string;
+  body?: any;
 };
 
 const Release = ({ id, html_url, tag_name, name, body }: Props) => {
