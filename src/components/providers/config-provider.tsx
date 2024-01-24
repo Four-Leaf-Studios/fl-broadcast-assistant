@@ -89,7 +89,7 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({ children }) => {
         score: 1,
       },
     },
-    classes: undefined,
+    classes: classes,
   });
 
   return (
