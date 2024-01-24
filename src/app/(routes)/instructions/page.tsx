@@ -9,9 +9,6 @@ type Props = {};
 const Instructions = () => {
   return (
     <>
-      <h1 className="text-center text-white text-3xl">
-        Welcome to RL Broadcaster!
-      </h1>
       <p className="text-left text-sm text-gray-300">
         RL Broadcaster lets you easily switch and edit between overlays for
         Rocket League. Instructions are below!

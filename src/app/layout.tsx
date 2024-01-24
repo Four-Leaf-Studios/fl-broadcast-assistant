@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ConfigProvider } from "@/components/providers/config-provider";
 import { WebSocketStatusProvider } from "@/components/providers/websocket-status-provider";
+import Header from "@/components/header";
+import { CurrentPageProvider } from "@/components/providers/current-page-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,15 +23,20 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ConfigProvider>
-          <WebSocketStatusProvider>
-            <Navbar />
-            <div className="w-full h-fit pl-[215px] py-4 pr-4 flex flex-col gap-4 bg-gray-900 ">
-              <div className="w-full flex h-fit gap-2"></div>
-              <div className="min-h-screen w-ful p-3 rounded-sm flex flex-col gap-4 text-white">
-                {children}
+          <CurrentPageProvider>
+            <WebSocketStatusProvider>
+              <div className="w-full flex h-screen overflow-hidden">
+                <Navbar />
+                <div className="w-full h-fit flex flex-col gap-4 bg-gray-900 ">
+                  <Header />
+                  <div className="w-full flex h-fit gap-2"></div>
+                  <div className="h-[85vh] mb-10 overflow-y-auto w-full p-3 rounded-sm flex flex-col gap-4 text-white">
+                    {children}
+                  </div>
+                </div>
               </div>
-            </div>
-          </WebSocketStatusProvider>
+            </WebSocketStatusProvider>
+          </CurrentPageProvider>
         </ConfigProvider>
       </body>
     </html>

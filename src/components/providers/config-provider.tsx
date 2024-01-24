@@ -1,4 +1,5 @@
 "use client";
+import { classes } from "@/lib/classes/classes";
 import React, { createContext, useState, ReactNode } from "react";
 
 // Define the shape of your configuration
@@ -25,6 +26,7 @@ export type Config = {
       score: number;
     };
   };
+  classes: { [key: string]: string } | undefined;
 };
 
 // Create a context for your configuration data
@@ -87,6 +89,7 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({ children }) => {
         score: 1,
       },
     },
+    classes: classes,
   });
 
   return (

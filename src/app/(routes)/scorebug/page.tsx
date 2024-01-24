@@ -8,8 +8,6 @@ type Props = {};
 const page = async (props: Props) => {
   return (
     <>
-      <h1 className="text-3xl">Scorebug</h1>
-
       <GeneralConfiguration />
 
       <SeriesConfiguration />
