@@ -5,11 +5,11 @@ import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/ext-language_tools";
 
 type Props = {
-  svelte: string;
-  setSvelte: (value: string) => void;
+  css: string;
+  setCSS: (value: string) => void;
 };
 
-const CustomCss = ({ svelte, setSvelte }: Props) => {
+const CustomCss = ({ css, setCSS }: Props) => {
   return (
     <div className="w-full relative">
       <AceEditor
@@ -18,13 +18,14 @@ const CustomCss = ({ svelte, setSvelte }: Props) => {
         theme="twilight"
         name="Html Preview"
         className="text-current bg-gray-900 rounded-md"
-        onChange={(value: string) => setSvelte(value)}
+        onChange={(value: string) => setCSS(value)}
         fontSize={14}
         width={"100%"}
+        height={"70vh"}
         showPrintMargin={true}
         showGutter={false}
         highlightActiveLine={true}
-        value={svelte}
+        value={css}
         setOptions={{
           enableBasicAutocompletion: true,
           enableLiveAutocompletion: true,
