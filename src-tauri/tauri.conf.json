@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "florida-tech-broadcast-tool",
-    "version": "1.0.4"
+    "version": "1.1.4"
   },
   "tauri": {
     "allowlist": {
