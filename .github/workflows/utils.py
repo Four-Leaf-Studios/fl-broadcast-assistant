@@ -26,3 +26,31 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
         return response
     return None
+
+import os
+from utils import update_issue_title
+import requests
+
+def run_update_issue_title():
+    token = os.getenv('GITHUB_TOKEN')
+    headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
+
+    issue_number = os.getenv('ISSUE_NUMBER')
+    repo = os.getenv('REPOSITORY')
+    label = os.getenv('ISSUE_LABEL').lower()
+    event_action = os.getenv('EVENT_ACTION')
+
+    issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
+
+    # Fetch the issue details
+    issue_response = requests.get(issue_api_url, headers=headers).json()
+    issue_title = issue_response['title']
+
+    if label == 'bug':
+        response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers)
+    elif label == 'enhancement':
+        response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers)
+
+    if response:
+        print(response.status_code)
+        print(response.json())
