@@ -1,4 +1,4 @@
-# issue_title_updater.py
+import argparse
 import requests
 import re
 import json
@@ -27,9 +27,6 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         return response
     return None
 
-import os
-from utils import update_issue_title
-import requests
 
 def run_update_issue_title():
     token = os.getenv('GITHUB_TOKEN')
@@ -45,12 +42,28 @@ def run_update_issue_title():
     # Fetch the issue details
     issue_response = requests.get(issue_api_url, headers=headers).json()
     issue_title = issue_response['title']
+    append_name = 'broadcaster'  # Define the append name
 
     if label == 'bug':
-        response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers)
+        response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
     elif label == 'enhancement':
-        response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers)
+        response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
 
     if response:
         print(response.status_code)
         print(response.json())
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Issue Title Updater")
+    parser.add_argument('--function', type=str, help='Function to run', required=True)
+
+    args = parser.parse_args()
+
+    if args.function == 'update_issue_title':
+        run_update_issue_title()
+    else:
+        print(f"Unknown function: {args.function}")
+
+if __name__ == "__main__":
+    main()
