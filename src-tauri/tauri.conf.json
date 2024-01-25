@@ -7,8 +7,8 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "florida-tech-broadcast-tool",
-    "version": "1.0.4"
+    "productName": "Leaf Blower",
+    "version": "1.1.4"
   },
   "tauri": {
     "allowlist": {
@@ -63,7 +63,7 @@
         "fullscreen": false,
         "height": 900,
         "resizable": true,
-        "title": "Four Leaf Studios RL Overlay Control Panel",
+        "title": "Four Leaf Studios: Leaf Blower",
         "width": 900
       }
     ]
