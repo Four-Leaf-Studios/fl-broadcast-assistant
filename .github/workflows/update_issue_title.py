@@ -19,20 +19,20 @@ issue_title = issue_response['title']
 
 def update_issue_title(label_prefix, label_name):
     if event_action == "labeled":
-        # Add prefix if not already present
-        if not issue_title.startswith(label_prefix):
+        # Add prefix and _broadcaster suffix if not already present
+        if not re.match(rf'^{label_prefix}\d{{4}}_broadcaster', issue_title):
             # Count current open issues with the specified label
             search_api_url = f"https://api.github.com/search/issues?q=repo:{repo}+label:{label_name}+state:open"
             search_response = requests.get(search_api_url, headers=headers).json()
             label_count = search_response['total_count']
 
-            # Format the label count as a four-digit number
-            label_number = f"{label_prefix}{label_count + 1:04d}"
+            # Format the label count as a four-digit number with _broadcaster suffix
+            label_number = f"{label_prefix}{label_count + 1:04d}_broadcaster"
             new_title = f"{label_number}: {issue_title}"
     else:
-        # Remove prefix if present
-        if issue_title.startswith(label_prefix):
-            new_title = re.sub(rf'^{label_prefix}\d{{4}}: ', '', issue_title)
+        # Remove prefix and _broadcaster suffix if present
+        if re.match(rf'^{label_prefix}\d{{4}}_broadcaster', issue_title):
+            new_title = re.sub(rf'^{label_prefix}\d{{4}}_broadcaster: ', '', issue_title)
 
     # Update issue title if changed
     if new_title != issue_title:
