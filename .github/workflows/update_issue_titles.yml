@@ -1,0 +1,25 @@
+name: Update Issue Titles
+
+on:
+  workflow_dispatch:  # Allows manual triggering of the action
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight
+
+jobs:
+  update-issue-titles:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Update Issue Titles
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Required for API access
+        REPOSITORY: ${{ github.repository }}
+      run: |
+        python update_issue_titles.py
