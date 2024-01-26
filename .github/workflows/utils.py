@@ -4,23 +4,35 @@ import re
 import json
 import os
 
+import re
+import requests
+import json
+
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     new_title = issue_title  # Initialize new_title with the original issue_title
-    
+
+    # Check if the title contains a match for US#### or BUG####
+    match = re.search(rf'({label_prefix}\d{{4}})_[^ ]*', issue_title)
+
     if event_action == "labeled":
-        # Add prefix and _broadcaster suffix if not already present
-        if not re.match(rf'^{label_prefix}\d{{4}}_{append_name}', issue_title):
+        # If there is a match, keep the number the same and append _broadcast
+        if match:
+            label_number = match.group(1)
+            new_title = f"{label_number}_{append_name}"
+        else:
             # Count current open issues with the specified label
             search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
             search_response = requests.get(search_api_url, headers=headers).json()
             label_count = search_response['total_count']
 
-            # Format the label count as a four-digit number with _broadcaster suffix
+            # Format the label count as a four-digit number with _broadcast suffix
             label_number = f"{label_prefix}{label_count + 1:04d}_{append_name}"
-            new_title = f"{label_number} {issue_title}"  # Removed the colon
+            new_title = f"{label_number} {issue_title}"
     else:
-        # Remove any existing append and replace with the correct one
-        new_title = re.sub(rf'^{label_prefix}\d{{4}}_[^ ]* ', f'{label_prefix}\\d{{4}}_{append_name} ', issue_title)
+        # If there is a match, keep the number the same and append _broadcast
+        if match:
+            label_number = match.group(1)
+            new_title = f"{label_number}_{append_name}"
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -29,38 +41,68 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         return response
     return None
 
+
+
+def run_update_issue_title():
+    token = os.getenv('GITHUB_TOKEN')
+    headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
+
+    issue_number = os.getenv('ISSUE_NUMBER')
+    repo = os.getenv('REPOSITORY')
+    label = os.getenv('ISSUE_LABEL').lower()
+    event_action = os.getenv('EVENT_ACTION')
+
+    issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
+
+    # Fetch the issue details
+    issue_response = requests.get(issue_api_url, headers=headers).json()
+    issue_title = issue_response['title']
+    append_name = 'broadcaster'  # Define the append name
+
+    if label == 'bug':
+        response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
+    elif label == 'enhancement':
+        response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
+
+    if response:
+        print(response.status_code)
+        print(response.json())
+        
 def update_all_issue_titles(repo, headers):
-    issues_api_url = f"https://api.github.com/repos/{repo}/issues"
     page = 1
     while True:
-        params = {'state': 'open', 'page': page, 'per_page': 100}
-        response = requests.get(issues_api_url, params=params, headers=headers)
-        issues = response.json()
+        # Fetch a page of issues from the repository
+        issues_api_url = f"https://api.github.com/repos/{repo}/issues?state=open&page={page}"
+        issues_response = requests.get(issues_api_url, headers=headers)
 
-        if not issues:
-            break
+        # Check if there are more pages of issues
+        if issues_response.status_code == 200:
+            issues_data = issues_response.json()
+            if len(issues_data) == 0:
+                break  # No more issues, exit the loop
 
-        for issue in issues:
-            if 'pull_request' in issue:
-                continue
+            # Iterate through the issues on the current page
+            for issue in issues_data:
+                issue_number = issue['number']
+                label = issue['labels'][0]['name'].lower()
+                event_action = "created"  # You can modify this as needed
 
-            issue_number = issue['number']
-            issue_title = issue['title']
-            issue_api_url = f"{issues_api_url}/{issue_number}"
-
-            # Check if 'US####' or 'BUG####' is present in the title
-            label_match = re.search(r'\b(US|BUG)\d{4}\b', issue_title)
-            if label_match:
-                old_label = label_match.group(0)
+                # Fetch the issue details
+                issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
+                issue_response = requests.get(issue_api_url, headers=headers).json()
+                issue_title = issue_response['title']
                 append_name = 'broadcaster'  # Define the append name
-                
-                # Check if '_broadcaster' is missing in the label
-                if not re.search(rf'{old_label}_{append_name}', issue_title):
-                    issue_title = issue_title.replace(old_label, "")
-                    response = update_issue_title(issue_api_url, issue_title, old_label, label.lower(), 'labeled', headers, append_name)
-                    if response and response.status_code == 200:
-                        print(f"Issue {issue_number} updated successfully.")
-        page += 1
+
+                # Update the issue title based on label
+                if label == 'bug':
+                    update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
+                elif label == 'enhancement':
+                    update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
+
+            page += 1
+        else:
+            print(f"Failed to fetch issues on page {page}. Status code: {issues_response.status_code}")
+            break
 
 
 def run_update_issue_titles():
