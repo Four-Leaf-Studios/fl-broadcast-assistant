@@ -48,12 +48,17 @@ def update_all_issue_titles(repo, headers):
             issue_title = issue['title']
             issue_api_url = f"{issues_api_url}/{issue_number}"
 
-            if 'BUG' in issue_title or 'US' in issue_title:
-                if not re.match(rf'^{(re.escape('BUG') + re.escape('US'))}\d{{4}}_broadcaster', issue_title):
-                    label_prefix = 'BUG' if 'BUG' in issue_title else 'US'
-                    label_name = 'bug' if label_prefix == 'BUG' else 'enhancement'
-                    event_action = 'labeled'
-                    append_name = 'broadcaster'  # Define the append name
+            # Extract the label prefix (e.g., 'US' or 'BUG')
+            label_match = re.match(r'^(BUG|US)\d{4}', issue_title)
+            if label_match:
+                label_prefix = label_match.group(1)
+                label_name = 'bug' if label_prefix == 'BUG' else 'enhancement'
+                event_action = 'labeled'
+                append_name = 'broadcaster'  # Define the append name
+
+                # Check if '_broadcaster' is missing in the label
+                if not re.search(rf'{label_prefix}\d{4}_{append_name}', issue_title):
+                    new_title = re.sub(rf'{label_prefix}\d{4}', f'{label_prefix}\d{4}_{append_name}', issue_title)
                     response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name)
                     if response and response.status_code == 200:
                         print(f"Issue {issue_number} updated successfully.")
