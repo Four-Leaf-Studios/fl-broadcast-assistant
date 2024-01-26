@@ -9,9 +9,13 @@ import requests
 import json
 
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
-    new_title = issue_title  # Initialize new_title with the original issue_title
+    # Check if the title contains _broadcast and matches the pattern US#### or BUG####
+    has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
+    
+    if has_broadcast:
+        # If _broadcast is already present, no need to update
+        return None
 
-    # Check if the title contains a match for US#### or BUG####
     match = re.search(rf'({label_prefix}\d{{4}})_[^ ]*', issue_title)
 
     if event_action == "labeled":
@@ -28,11 +32,6 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
             # Format the label count as a four-digit number with _broadcast suffix
             label_number = f"{label_prefix}{label_count + 1:04d}_{append_name}"
             new_title = f"{label_number} {issue_title}"
-    else:
-        # If there is a match, keep the number the same and append _broadcast
-        if match:
-            label_number = match.group(1)
-            new_title = f"{label_number}_{append_name}"
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -40,6 +39,7 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
         return response
     return None
+
 
 
 
