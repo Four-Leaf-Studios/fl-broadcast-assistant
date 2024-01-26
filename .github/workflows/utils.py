@@ -75,7 +75,7 @@ def run_update_issue_title():
         response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
     elif label == 'enhancement':
         response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
-    else
+    else:
         response = update_issue_title(issue_api_url, issue_title, '', '', event_action, headers, append_name)
     if response:
         print(response.status_code)
