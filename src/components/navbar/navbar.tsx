@@ -1,11 +1,13 @@
 import React from "react";
 import NavbarTabs from "./navbar-tabs";
+import Header from "../header";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
   return (
-    <nav className="w-fit h-screen bg-gray-950 flex flex-col justify-start items-start p-2 gap-5">
+    <nav className="w-[40%] h-screen  flex flex-col justify-start items-start">
+      <Header title="Leaf Blower" background="bg-gray-950" />
       {/* Tabs */}
       <NavbarTabs />
     </nav>

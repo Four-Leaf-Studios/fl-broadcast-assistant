@@ -27,10 +27,9 @@ export default function RootLayout({
             <WebSocketStatusProvider>
               <div className="w-full flex h-screen overflow-hidden">
                 <Navbar />
-                <div className="w-full h-fit flex flex-col gap-4 bg-gray-900 ">
+                <div className="w-full h-full flex flex-col">
                   <Header />
-                  <div className="w-full flex h-fit gap-2"></div>
-                  <div className="h-[85vh] mb-10 overflow-y-auto w-full p-3 rounded-sm flex flex-col gap-4 text-white">
+                  <div className="h-full bg-gray-900  overflow-y-auto w-full p-3 rounded-sm flex flex-col gap-4 text-white">
                     {children}
                   </div>
                 </div>
