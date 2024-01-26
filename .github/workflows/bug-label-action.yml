@@ -24,7 +24,7 @@ jobs:
       run: pip install requests
 
     - name: Update Issue Title
-      run: python .github/workflows/issue_title_updater.py --function update_issue_title
+      run: python .github/workflows/utils.py --function update_issue_title
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ISSUE_NUMBER: ${{ github.event.issue.number }}
