@@ -36,6 +36,9 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         if match:
             label_number = match.group(1)
             new_title = f"{label_number}_{append_name}"
+        else:
+            # If no match found, just append _broadcast to the original title
+            new_title = f"{issue_title}_{append_name}"
 
     # Update issue title if changed
     if new_title != issue_title:
