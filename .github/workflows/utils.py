@@ -21,7 +21,7 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         # If there is a match, keep the number the same and append _broadcast
         if match:
             label_number = match.group(1)
-            new_title = f"{label_number}_{append_name}"
+            new_title = f"{label_number}_{append_name} {issue_title}"
         else:
             # Count current open issues with the specified label
             search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
@@ -30,7 +30,7 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
 
             # Format the label count as a four-digit number with _broadcast suffix
             label_number = f"{label_prefix}{label_count + 1:04d}"
-            new_title = f"{label_number} {append_name} {issue_title}"
+            new_title = f"{label_number}_{append_name} {issue_title}"
     else:
         # If there is a match, keep the number the same and append _broadcast
         if match:
