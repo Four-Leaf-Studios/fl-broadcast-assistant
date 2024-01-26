@@ -2,6 +2,7 @@ import argparse
 import requests
 import re
 import json
+import os
 
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     if event_action == "labeled":
