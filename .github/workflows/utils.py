@@ -56,7 +56,8 @@ def update_all_issue_titles(repo, headers):
 
                 # Check if '_broadcaster' is missing in the label
                 if not re.search(rf'{label}_{append_name}', issue_title):
-                    new_title = re.sub(rf'{label}', f'{label}_{append_name}', issue_title)
+                    new_label = f'{label}_{append_name}'
+                    new_title = issue_title.replace(label, new_label)
                     response = update_issue_title(issue_api_url, issue_title, label, label.lower(), 'labeled', headers, append_name)
                     if response and response.status_code == 200:
                         print(f"Issue {issue_number} updated successfully.")
