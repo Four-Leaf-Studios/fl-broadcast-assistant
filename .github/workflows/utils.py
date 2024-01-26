@@ -54,9 +54,6 @@ def run_update_issue_title():
         print(response.json())
 
 
-import requests
-
-
 def update_all_issue_titles(repo, headers):
     issues_api_url = f"https://api.github.com/repos/{repo}/issues"
     page = 1
