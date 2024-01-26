@@ -85,7 +85,7 @@ def update_all_issue_titles(repo, headers):
             for issue in issues_data:
                 issue_number = issue['number']
                 label = issue['labels'][0]['name'].lower()
-                event_action = "created"  # You can modify this as needed
+                event_action = "labeled"  # You can modify this as needed
 
                 # Fetch the issue details
                 issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
