@@ -97,7 +97,13 @@ def update_all_issue_titles(repo, headers):
             # Iterate through the issues on the current page
             for issue in issues_data:
                 issue_number = issue['number']
-                label = issue['labels'][0]['name'].lower()
+                
+                # Check if the 'labels' list is not empty before accessing its elements
+                if 'labels' in issue and issue['labels']:
+                    label = issue['labels'][0]['name'].lower()
+                else:
+                    label = ''  # or handle the case where 'labels' is empty in the way that suits your needs
+
                 event_action = "labeled"  # You can modify this as needed
 
                 # Fetch the issue details
