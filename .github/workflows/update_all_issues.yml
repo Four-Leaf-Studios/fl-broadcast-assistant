@@ -1,5 +1,9 @@
 name: Update Issue Titles
 
+permissions:
+  contents: read
+  issues: write
+
 on:
   workflow_dispatch:  # Allows manual triggering of the action
   schedule:
