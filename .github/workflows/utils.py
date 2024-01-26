@@ -19,9 +19,8 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
             label_number = f"{label_prefix}{label_count + 1:04d}_{append_name}"
             new_title = f"{label_number} {issue_title}"  # Removed the colon
     else:
-        # Remove prefix and _broadcaster suffix if present
-        if re.match(rf'^{label_prefix}\d{{4}}_{append_name}', issue_title):
-            new_title = re.sub(rf'^{label_prefix}\d{{4}}_{append_name} ', '', issue_title)  # Adjusted the regex to remove the colon
+        # Remove any existing append and replace with the correct one
+        new_title = re.sub(rf'^{label_prefix}\d{{4}}_[^ ]* ', f'{label_prefix}\\d{{4}}_{append_name} ', issue_title)
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -29,32 +28,6 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
         return response
     return None
-
-def run_update_issue_title():
-    token = os.getenv('GITHUB_TOKEN')
-    headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
-
-    issue_number = os.getenv('ISSUE_NUMBER')
-    repo = os.getenv('REPOSITORY')
-    label = os.getenv('ISSUE_LABEL').lower()
-    event_action = os.getenv('EVENT_ACTION')
-
-    issue_api_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}"
-
-    # Fetch the issue details
-    issue_response = requests.get(issue_api_url, headers=headers).json()
-    issue_title = issue_response['title']
-    append_name = 'broadcaster'  # Define the append name
-
-    if label == 'bug':
-        response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
-    elif label == 'enhancement':
-        response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
-
-    if response:
-        print(response.status_code)
-        print(response.json())
-
 
 def update_all_issue_titles(repo, headers):
     issues_api_url = f"https://api.github.com/repos/{repo}/issues"
@@ -75,12 +48,15 @@ def update_all_issue_titles(repo, headers):
             issue_title = issue['title']
             issue_api_url = f"{issues_api_url}/{issue_number}"
 
-            label_prefix, label_name = ('BUG', 'bug') if 'BUG' in issue_title else ('US', 'enhancement')
-            event_action = 'labeled'
-            append_name = 'broadcaster'  # Define the append name
-            response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name)
-            if response and response.status_code == 200:
-                print(f"Issue {issue_number} updated successfully.")
+            if 'BUG' in issue_title or 'US' in issue_title:
+                if not re.match(rf'^{(re.escape('BUG') + re.escape('US'))}\d{{4}}_broadcaster', issue_title):
+                    label_prefix = 'BUG' if 'BUG' in issue_title else 'US'
+                    label_name = 'bug' if label_prefix == 'BUG' else 'enhancement'
+                    event_action = 'labeled'
+                    append_name = 'broadcaster'  # Define the append name
+                    response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name)
+                    if response and response.status_code == 200:
+                        print(f"Issue {issue_number} updated successfully.")
 
         page += 1
 
@@ -97,10 +73,10 @@ def main():
 
     args = parser.parse_args()
 
-    if args.function == 'update_issue_title':
-        run_update_issue_title()
-    elif args.function == 'update_issue_titles':
+    if args.function == 'update_issue_titles':
         run_update_issue_titles()
+    elif args.function == 'update_issue_title':
+        run_update_issue_title()
     else:
         print(f"Unknown function: {args.function}")
 
