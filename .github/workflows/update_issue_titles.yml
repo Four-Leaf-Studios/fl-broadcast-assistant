@@ -17,11 +17,11 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Install Python Dependencies
+      run: pip install requests
+
     - name: Update Issue Titles
       run: python .github/workflows/utils.py --function update_issue_titles
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ISSUE_NUMBER: ${{ github.event.issue.number }}
         REPOSITORY: ${{ github.repository }}
-        ISSUE_LABEL: ${{ github.event.label.name }}
-        EVENT_ACTION: ${{ github.event.action }}
