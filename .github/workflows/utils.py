@@ -4,14 +4,6 @@ import re
 import json
 import os
 
-import re
-import requests
-import json
-
-import re
-import requests
-import json
-
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     # Check if the title contains _broadcast and matches the pattern US#### or BUG####
     has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
