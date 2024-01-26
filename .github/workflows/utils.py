@@ -49,7 +49,7 @@ def update_all_issue_titles(repo, headers):
             issue_api_url = f"{issues_api_url}/{issue_number}"
 
             # Check if 'US####' or 'BUG####' is present in the title
-            label_match = re.search(r'(US|BUG)\d{4}', issue_title)
+            label_match = re.search(r'\b(US|BUG)\d{4}\b', issue_title)
             if label_match:
                 label = label_match.group(0)
                 append_name = 'broadcaster'  # Define the append name
