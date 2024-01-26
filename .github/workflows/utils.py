@@ -75,8 +75,8 @@ def update_all_issue_titles(repo, headers):
 
             label_prefix, label_name = ('BUG', 'bug') if 'BUG' in issue_title else ('US', 'enhancement')
             event_action = 'labeled'
-
-            response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers)
+            append_name = 'broadcaster'  # Define the append name
+            response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name)
             if response and response.status_code == 200:
                 print(f"Issue {issue_number} updated successfully.")
 
