@@ -4,7 +4,6 @@ permissions:
   contents: read
   issues: write
 
-
 on:
   issues:
     types: [labeled, unlabeled]
@@ -25,7 +24,7 @@ jobs:
       run: pip install requests
 
     - name: Update Issue Title
-      run: python .github/workflows/update_issue_title.py
+      run: python .github/workflows/issue_title_updater.py --function update_issue_title
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ISSUE_NUMBER: ${{ github.event.issue.number }}
