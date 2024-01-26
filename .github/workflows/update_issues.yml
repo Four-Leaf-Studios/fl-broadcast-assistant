@@ -1,4 +1,4 @@
-name: Bug Label Action
+name: Update Issue Title When Tag Is Applied
 
 permissions:
   contents: read
