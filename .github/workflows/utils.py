@@ -10,40 +10,41 @@ def remove_bug_or_us_number(issue_title):
     return cleaned_title.strip()  # Remove leading/trailing whitespace
     
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
-    # Check if the title contains _broadcast and matches the pattern US#### or BUG####
-    has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
-    
-    if has_broadcast:
-        # If _broadcast is already present, no need to update
-        return None
-
-    new_title = issue_title  # Initialize new_title with the original issue_title
-
-    # Check if the title contains a match for US#### or BUG####
-    match = re.search(rf'({label_prefix}\d{{4}}) [^ ]*', issue_title)
-
-    if event_action == "labeled":
-        # If there is a match, keep the number the same and append _broadcast
-        if match:
-            label_number = match.group(1)
-            new_title = f"{label_number}_{append_name} {remove_bug_or_us_number(issue_title)}"
-        else:
-            # Count current open issues with the specified label
-            search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
-            search_response = requests.get(search_api_url, headers=headers).json()
-            label_count = search_response['total_count']
-
-            # Format the label count as a four-digit number with _broadcast suffix
-            label_number = f"{label_prefix}{label_count + 1:04d}"
-            new_title = f"{label_number}_{append_name} {issue_title}"
+    if event_action == "unlabeled":
+        # Remove US#### or BUG#### pattern and _broadcast (if present) from the issue title
+        new_title = remove_bug_or_us_number(issue_title).replace('_broadcast', '')
     else:
-        # If there is a match, keep the number the same and append _broadcast
-        if match:
-            label_number = match.group(1)
-            new_title = f"{label_number}_{append_name}"
+        # Check if the title contains _broadcast and matches the pattern US#### or BUG####
+        has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
+
+        if has_broadcast:
+            # If _broadcast is already present, no need to update
+            return None
+
+        new_title = issue_title  # Initialize new_title with the original issue_title
+
+        # Check if the title contains a match for US#### or BUG####
+        match = re.search(rf'({label_prefix}\d{{4}}) [^ ]*', issue_title)
+
+        if event_action == "labeled":
+            # If there is a match, keep the number the same and append _broadcast
+            if match:
+                label_number = match.group(1)
+                new_title = f"{label_number}_{append_name} {remove_bug_or_us_number(issue_title)}"
+            else:
+                # Count current open issues with the specified label
+                search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
+                search_response = requests.get(search_api_url, headers=headers).json()
+                label_count = search_response['total_count']
+
+                # Format the label count as a four-digit number with _broadcast suffix
+                label_number = f"{label_prefix}{label_count + 1:04d}"
+                new_title = f"{label_number}_{append_name} {issue_title}"
         else:
-            # If no match found, just append _broadcast to the original title
-            new_title = f"{issue_title}_{append_name}"
+            # If there is a match, keep the number the same and append _broadcast
+            if match:
+                label_number = match.group(1)
+                new_title = f"{label_number}_{append_name}"
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -74,7 +75,8 @@ def run_update_issue_title():
         response = update_issue_title(issue_api_url, issue_title, 'BUG', 'bug', event_action, headers, append_name)
     elif label == 'enhancement':
         response = update_issue_title(issue_api_url, issue_title, 'US', 'enhancement', event_action, headers, append_name)
-
+    else
+        response = update_issue_title(issue_api_url, issue_title, '', '', event_action, headers, append_name)
     if response:
         print(response.status_code)
         print(response.json())
