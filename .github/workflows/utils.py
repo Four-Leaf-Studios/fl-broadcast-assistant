@@ -14,12 +14,12 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
             label_count = search_response['total_count']
 
             # Format the label count as a four-digit number with _broadcaster suffix
-            label_number = f"{label_prefix}{label_count + 1:04d}_broadcaster"
-            new_title = f"{label_number}: {issue_title}"
+            label_number = f"{label_prefix}{label_count + 1:04d}_{append_name}"
+            new_title = f"{label_number} {issue_title}"  # Removed the colon
     else:
         # Remove prefix and _broadcaster suffix if present
         if re.match(rf'^{label_prefix}\d{{4}}_{append_name}', issue_title):
-            new_title = re.sub(rf'^{label_prefix}\d{{4}}_{append_name}: ', '', issue_title)
+            new_title = re.sub(rf'^{label_prefix}\d{{4}}_{append_name} ', '', issue_title)  # Adjusted the regex to remove the colon
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -27,7 +27,6 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
         return response
     return None
-
 
 def run_update_issue_title():
     token = os.getenv('GITHUB_TOKEN')
@@ -55,6 +54,44 @@ def run_update_issue_title():
         print(response.json())
 
 
+import requests
+
+
+def update_all_issue_titles(repo, headers):
+    issues_api_url = f"https://api.github.com/repos/{repo}/issues"
+    page = 1
+    while True:
+        params = {'state': 'open', 'page': page, 'per_page': 100}
+        response = requests.get(issues_api_url, params=params, headers=headers)
+        issues = response.json()
+
+        if not issues:
+            break
+
+        for issue in issues:
+            if 'pull_request' in issue:
+                continue
+
+            issue_number = issue['number']
+            issue_title = issue['title']
+            issue_api_url = f"{issues_api_url}/{issue_number}"
+
+            label_prefix, label_name = ('BUG', 'bug') if 'BUG' in issue_title else ('US', 'enhancement')
+            event_action = 'labeled'
+
+            response = update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers)
+            if response and response.status_code == 200:
+                print(f"Issue {issue_number} updated successfully.")
+
+        page += 1
+
+def run_update_issue_titles():
+    token = os.getenv('GITHUB_TOKEN')
+    repo = os.getenv('REPOSITORY')
+    headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
+
+    update_all_issue_titles(repo, headers)
+
 def main():
     parser = argparse.ArgumentParser(description="Issue Title Updater")
     parser.add_argument('--function', type=str, help='Function to run', required=True)
@@ -63,6 +100,8 @@ def main():
 
     if args.function == 'update_issue_title':
         run_update_issue_title()
+    elif args.function == 'update_issue_titles':
+        run_update_issue_titles()
     else:
         print(f"Unknown function: {args.function}")
 
