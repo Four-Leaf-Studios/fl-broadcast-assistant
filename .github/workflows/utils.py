@@ -4,6 +4,11 @@ import re
 import json
 import os
 
+def remove_bug_or_us_number(issue_title):
+    # Remove BUG#### or US#### pattern from issue_title
+    cleaned_title = re.sub(r'(BUG\d{4}|US\d{4})', '', issue_title)
+    return cleaned_title.strip()  # Remove leading/trailing whitespace
+    
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     # Check if the title contains _broadcast and matches the pattern US#### or BUG####
     has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
@@ -21,7 +26,7 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         # If there is a match, keep the number the same and append _broadcast
         if match:
             label_number = match.group(1)
-            new_title = f"{label_number}_{append_name} {issue_title}"
+            new_title = f"{label_number}_{append_name} {remove_bug_or_us_number(issue_title)}"
         else:
             # Count current open issues with the specified label
             search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
