@@ -5,6 +5,8 @@ import json
 import os
 
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
+    new_title = issue_title  # Initialize new_title with the original issue_title
+    
     if event_action == "labeled":
         # Add prefix and _broadcaster suffix if not already present
         if not re.match(rf'^{label_prefix}\d{{4}}_{append_name}', issue_title):
