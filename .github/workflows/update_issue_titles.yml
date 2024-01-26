@@ -18,8 +18,10 @@ jobs:
         python-version: '3.x'
 
     - name: Update Issue Titles
+      run: python .github/workflows/utils.py --function update_issue_titles
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Required for API access
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
         REPOSITORY: ${{ github.repository }}
-      run: |
-        python update_issue_titles.py
+        ISSUE_LABEL: ${{ github.event.label.name }}
+        EVENT_ACTION: ${{ github.event.action }}
