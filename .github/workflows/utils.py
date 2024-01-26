@@ -51,18 +51,15 @@ def update_all_issue_titles(repo, headers):
             # Check if 'US####' or 'BUG####' is present in the title
             label_match = re.search(r'\b(US|BUG)\d{4}\b', issue_title)
             if label_match:
-                label = label_match.group(0)
                 append_name = 'broadcaster'  # Define the append name
-
+                
                 # Check if '_broadcaster' is missing in the label
                 if not re.search(rf'{label}_{append_name}', issue_title):
                     old_label = label_match.group(0)
-                    new_label = old_label + "_broadcast"
-                    issue_title = re.sub(re.escape(old_label), '', issue_title)
-                    response = update_issue_title(issue_api_url, issue_title, label, label.lower(), 'labeled', headers, append_name)
+                    issue_title = issue_title.replace(old_label, "")
+                    response = update_issue_title(issue_api_url, issue_title, old_label, label.lower(), 'labeled', headers, append_name)
                     if response and response.status_code == 200:
                         print(f"Issue {issue_number} updated successfully.")
-
         page += 1
 
 
