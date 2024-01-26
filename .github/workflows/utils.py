@@ -8,6 +8,10 @@ import re
 import requests
 import json
 
+import re
+import requests
+import json
+
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     # Check if the title contains _broadcast and matches the pattern US#### or BUG####
     has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcast', issue_title)
@@ -16,7 +20,10 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         # If _broadcast is already present, no need to update
         return None
 
-    match = re.search(rf'({label_prefix}\d{{4}})_[^ ]*', issue_title)
+    new_title = issue_title  # Initialize new_title with the original issue_title
+
+    # Check if the title contains a match for US#### or BUG####
+    match = re.search(rf'({label_prefix}\d{{4}}) [^ ]*', issue_title)
 
     if event_action == "labeled":
         # If there is a match, keep the number the same and append _broadcast
@@ -30,8 +37,13 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
             label_count = search_response['total_count']
 
             # Format the label count as a four-digit number with _broadcast suffix
-            label_number = f"{label_prefix}{label_count + 1:04d}_{append_name}"
-            new_title = f"{label_number} {issue_title}"
+            label_number = f"{label_prefix}{label_count + 1:04d}"
+            new_title = f"{label_number} {append_name} {issue_title}"
+    else:
+        # If there is a match, keep the number the same and append _broadcast
+        if match:
+            label_number = match.group(1)
+            new_title = f"{label_number}_{append_name}"
 
     # Update issue title if changed
     if new_title != issue_title:
@@ -39,7 +51,6 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
         response = requests.patch(issue_api_url, headers=headers, data=json.dumps(update_data))
         return response
     return None
-
 
 
 
