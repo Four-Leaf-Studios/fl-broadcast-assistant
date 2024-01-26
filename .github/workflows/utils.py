@@ -12,10 +12,10 @@ def remove_bug_or_us_number(issue_title):
 def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, event_action, headers, append_name):
     if event_action == "unlabeled":
         # Remove US#### or BUG#### pattern and _broadcast (if present) from the issue title
-        new_title = remove_bug_or_us_number(issue_title).replace('_broadcaster', '')
+        new_title = remove_bug_or_us_number(issue_title).replace('_' + append_name, '')
     else:
         # Check if the title contains _broadcast and matches the pattern US#### or BUG####
-        has_broadcast = re.search(rf'{label_prefix}\d{{4}}_broadcaster', issue_title)
+        has_broadcast = re.search(rf'{label_prefix}\d{{4}}_{append_name}', issue_title)
 
         if has_broadcast:
             # If _broadcast is already present, no need to update
