@@ -65,7 +65,7 @@ const NavbarTabs = (props: Props) => {
     },
   ];
   return (
-    <div className="w-full h-full flex flex-col bg-gray-950 items-start gap-4 text-sm text-gray-300 p-2">
+    <div className="w-full h-full flex flex-col bg-gray-800 items-start gap-4 text-sm text-gray-300 p-2">
       {tabs.map((tab) => (
         <NavbarTab
           key={tab.title}
