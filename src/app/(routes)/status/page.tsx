@@ -35,7 +35,6 @@ const Status = (props: Props) => {
       </p>
       <Checkbox
         checked={on}
-        disabled={waitingToReconnect || reconnecting}
         label={on ? "Turn Off" : "Turn On"}
         classes={{
           root: "flex justify-start items-center gap-3",
