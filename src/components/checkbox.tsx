@@ -10,7 +10,7 @@ type Props = {
     checked?: string;
     unchecked?: string;
   };
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 const Checkbox = ({

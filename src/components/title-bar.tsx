@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { WebviewWindow, appWindow } from "@tauri-apps/api/window";
+import { WebviewWindow } from "@tauri-apps/api/window";
+import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
+import { relaunch } from "@tauri-apps/api/process";
+import { modifyLinks, openExternal } from "@/lib/utils";
+import { marked } from "marked";
 
 const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
   return (
@@ -16,6 +20,7 @@ const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
 
 const TitleBar = () => {
   const [appWindow, setAppWindow] = useState<WebviewWindow>();
+  const [manifest, setManifest] = useState<any>();
 
   const setupAppWindow = async () => {
     const appWindow = (await import("@tauri-apps/api/window")).appWindow;
@@ -29,11 +34,47 @@ const TitleBar = () => {
   const windowMinimize = () => appWindow?.minimize();
   const windowMaximize = () => appWindow?.maximize();
   const windowClose = () => appWindow?.close();
+
+  function startInstall(newVersion: any) {
+    installUpdate().then(relaunch);
+  }
+
+  // update checker
+  useEffect(() => {
+    checkUpdate().then(({ shouldUpdate, manifest }) => {
+      if (shouldUpdate) {
+        setManifest(manifest);
+      }
+    });
+  }, []);
+
   return (
     <div
       className="w-full h-[25px] fixed top-0 flex items-center justify-end bg-gray-700 text-white webview-drag-region gap-1"
       data-tauri-drag-region="true"
     >
+      {manifest && (
+        <div className="fixed bottom-0 right-0 m-10 bg-gray-950 rounded-md p-10 w-1/2 lg:w-1/4 flex flex-col gap-5 justify-start items-center group hover:w-2/3">
+          <h1 className="text-start w-full text-lg">
+            Version {manifest?.version} Available
+          </h1>
+          <div
+            className="w-full h-fit overflow-y-auto hidden group-hover:flex flex-col"
+            dangerouslySetInnerHTML={{
+              __html: modifyLinks(
+                marked.parse(manifest?.body) as string
+              ) as string,
+            }}
+          />
+
+          <button
+            className="bg-green-500 rounded-md p-2 w-full"
+            onClick={() => startInstall(manifest?.version)}
+          >
+            Click to Install
+          </button>
+        </div>
+      )}
       <TitleBarButton
         src={
           <svg

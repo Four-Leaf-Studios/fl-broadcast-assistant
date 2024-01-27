@@ -52,3 +52,7 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+a {
+  color: rgb(109, 114, 180);
+}
