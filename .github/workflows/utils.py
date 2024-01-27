@@ -85,7 +85,7 @@ def update_all_issue_titles(repo, headers):
     page = 1
     while True:
         # Fetch a page of issues from the repository
-        issues_api_url = f"https://api.github.com/repos/{repo}/issues?state=open&page={page}"
+        issues_api_url = f"https://api.github.com/repos/{repo}/issues?state=all&page={page}"
         issues_response = requests.get(issues_api_url, headers=headers)
 
         # Check if there are more pages of issues
