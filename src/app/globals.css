@@ -16,7 +16,39 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: #000000;
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #55555560;
+}
+
+/* Hide the scrollbar when the .no-scrollbar class is applied */
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Optional: If you want to hide scrollbar on other browsers, you can use the following code */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer/Edge */
+}
+
+/* Optional: If you want to hide scrollbar on Firefox when the class is applied */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

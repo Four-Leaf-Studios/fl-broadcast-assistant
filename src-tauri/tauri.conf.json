@@ -8,11 +8,14 @@
   },
   "package": {
     "productName": "Leaf Blower",
-    "version": "1.1.4"
+    "version": "1.2.4"
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "window": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -64,7 +67,9 @@
         "height": 900,
         "resizable": true,
         "title": "Four Leaf Studios: Leaf Blower",
-        "width": 900
+        "width": 900,
+        "decorations": false,
+        "maximized": true
       }
     ]
   }

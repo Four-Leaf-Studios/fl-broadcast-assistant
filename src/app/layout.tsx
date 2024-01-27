@@ -6,6 +6,7 @@ import { ConfigProvider } from "@/components/providers/config-provider";
 import { WebSocketStatusProvider } from "@/components/providers/websocket-status-provider";
 import Header from "@/components/header";
 import { CurrentPageProvider } from "@/components/providers/current-page-provider";
+import TitleBar from "@/components/title-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,19 +22,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} no-scrollbar`}>
         <ConfigProvider>
           <CurrentPageProvider>
             <WebSocketStatusProvider>
-              <div className="w-full flex h-screen overflow-hidden">
-                <Navbar />
-                <div className="w-full h-full flex flex-col">
-                  <Header />
-                  <div className="h-full bg-gray-900  overflow-y-auto w-full p-3 rounded-sm flex flex-col gap-4 text-white">
-                    {children}
+              <>
+                <TitleBar />
+                <div className=" bg-gray-700 h-screen w-screen pt-[26px] pl-8">
+                  <div className="w-full flex h-full overflow-hidden rounded-l-lg">
+                    <Navbar />
+                    <div className="w-full h-full flex flex-col overflow-hidden">
+                      <Header />
+                      <div className="h-full bg-gray-900  overflow-y-auto w-full p-3 rounded-sm flex flex-col gap-4 text-white">
+                        {children}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             </WebSocketStatusProvider>
           </CurrentPageProvider>
         </ConfigProvider>
