@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { appWindow } from "@tauri-apps/api/window";
+import React, { useEffect, useState } from "react";
+import { WebviewWindow, appWindow } from "@tauri-apps/api/window";
 
 const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
   return (
@@ -15,6 +15,20 @@ const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
 };
 
 const TitleBar = () => {
+  const [appWindow, setAppWindow] = useState<WebviewWindow>();
+
+  const setupAppWindow = async () => {
+    const appWindow = (await import("@tauri-apps/api/window")).appWindow;
+    setAppWindow(appWindow);
+  };
+
+  useEffect(() => {
+    setupAppWindow();
+  }, []);
+
+  const windowMinimize = () => appWindow?.minimize();
+  const windowMaximize = () => appWindow?.maximize();
+  const windowClose = () => appWindow?.close();
   return (
     <div
       className="w-full h-[25px] fixed top-0 flex items-center justify-end bg-gray-700 text-white webview-drag-region gap-1"
@@ -32,7 +46,7 @@ const TitleBar = () => {
             <path d="M20,14H4V10H20" />
           </svg>
         }
-        onClick={() => appWindow.minimize()}
+        onClick={windowMinimize}
       />
       <TitleBarButton
         src={
@@ -45,7 +59,7 @@ const TitleBar = () => {
             <path fill="currentColor" d="M4 4h16v16H4zm2 4v10h12V8z" />
           </svg>
         }
-        onClick={() => appWindow.toggleMaximize()}
+        onClick={windowMaximize}
       />
       <TitleBarButton
         src={
@@ -61,7 +75,7 @@ const TitleBar = () => {
             />
           </svg>
         }
-        onClick={() => appWindow.close()}
+        onClick={windowClose}
       />
     </div>
   );
