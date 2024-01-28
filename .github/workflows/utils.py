@@ -33,7 +33,7 @@ def update_issue_title(issue_api_url, issue_title, label_prefix, label_name, eve
                 new_title = f"{label_number}_{append_name} {remove_bug_or_us_number(issue_title)}"
             else:
                 # Count current open issues with the specified label
-                search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:open"
+                search_api_url = f"https://api.github.com/search/issues?q=repo:{issue_api_url.split('/issues/')[0][29:]}+label:{label_name}+state:all"
                 search_response = requests.get(search_api_url, headers=headers).json()
                 label_count = search_response['total_count']
 
