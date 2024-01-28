@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { marked } from "marked";
 import { modifyLinks } from "@/lib/utils";
+import useSiteWindow from "../hooks/useSiteWindow";
 
 type Props = {
   id?: string;
@@ -12,19 +13,10 @@ type Props = {
 };
 
 const Release = ({ id, html_url, tag_name, name, body }: Props) => {
+  const { browserWindow } = useSiteWindow();
   const [open, setOpen] = useState(false);
-  const [appWindow, setAppWindow] = useState<any>();
 
-  const setupAppWindow = async () => {
-    (await import("@tauri-apps/api/window")).appWindow;
-    setAppWindow(window);
-  };
-
-  useEffect(() => {
-    setupAppWindow();
-  }, []);
-
-  if (!appWindow) return;
+  if (!browserWindow) return;
   const toggleOpen = () => setOpen((currOpen) => !currOpen);
 
   // Note DOMPURIFY is preferred here but there's not really any malicious opportunities on app.

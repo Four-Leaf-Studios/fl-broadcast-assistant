@@ -5,8 +5,8 @@ import { Inter } from "next/font/google";
 import { ConfigProvider } from "@/components/providers/config-provider";
 import { WebSocketStatusProvider } from "@/components/providers/websocket-status-provider";
 import Header from "@/components/header";
-import { CurrentPageProvider } from "@/components/providers/current-page-provider";
 import TitleBar from "@/components/title-bar";
+import { AuthContextProvider } from "@/components/providers/auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} no-scrollbar`}>
-        <ConfigProvider>
-          <CurrentPageProvider>
+        <AuthContextProvider>
+          <ConfigProvider>
             <WebSocketStatusProvider>
               <>
                 <TitleBar />
@@ -41,8 +41,8 @@ export default function RootLayout({
                 </div>
               </>
             </WebSocketStatusProvider>
-          </CurrentPageProvider>
-        </ConfigProvider>
+          </ConfigProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );
