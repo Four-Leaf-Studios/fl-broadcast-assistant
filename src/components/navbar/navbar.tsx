@@ -9,6 +9,7 @@ type Props = {};
 const Navbar = (props: Props) => {
   const { user } = useAuth();
   if (!user) return;
+
   return (
     <nav className="w-[40%] lg:w-[18%] h-full flex flex-col justify-start items-start">
       <Header title="Leaf Blower" background="bg-gray-800" />
