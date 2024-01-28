@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { memo } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./providers/auth-provider";
 
@@ -15,29 +15,38 @@ function formatPath(path: string): string {
 
   return formattedPath;
 }
-const Header = ({ title = "", background = "bg-gray-900" }) => {
-  const { handleSignOut, user } = useAuth();
+const Header = memo(
+  ({
+    title = "",
+    background = "bg-gray-900",
+  }: {
+    title: string;
+    background: string;
+  }) => {
+    const { handleSignOut, user } = useAuth();
 
-  const path = usePathname();
-  const newPath = path === "/" ? "Home" : formatPath(path);
+    const path = usePathname();
+    const newPath = path === "/" ? "Home" : formatPath(path);
 
-  return (
-    <h1
-      className={`text-2xl w-full h-20 max-h-16 ${background} p-4 text-white flex justify-between items-center mb-0.5`}
-    >
-      {title ? title : newPath}
-      {!title && user && (
-        <div className="flex gap-2 text-sm">
-          <button
-            onClick={() => handleSignOut()}
-            className="rounded-md p-2 bg-gray-800 hover:bg-gray-700"
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </h1>
-  );
-};
+    return (
+      <h1
+        className={`text-2xl w-full h-20 max-h-16 ${background} p-4 text-white flex justify-between items-center mb-0.5`}
+      >
+        {title ? title : newPath}
+        {!title && user && (
+          <div className="flex gap-2 text-sm">
+            <button
+              onClick={() => handleSignOut()}
+              className="rounded-md p-2 bg-gray-800 hover:bg-gray-700"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </h1>
+    );
+  }
+);
 
+Header.displayName = "Header";
 export default Header;

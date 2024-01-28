@@ -30,18 +30,27 @@ export const AuthContextProvider = (props: any) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    console.log("AUTH RERENDERED");
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN") router.push("/");
-        setUserSession(session);
-        setUser(session?.user ?? null);
+
+        if (
+          event === "SIGNED_IN" ||
+          event === "SIGNED_OUT" ||
+          event === "TOKEN_REFRESHED" ||
+          event === "USER_UPDATED"
+        ) {
+          setUserSession(session);
+          setUser(session?.user ?? null);
+        }
       }
     );
 
     return () => {
-      authListener.subscription;
+      authListener.subscription.unsubscribe();
     };
-  }, [path, router, supabase.auth, user]);
+  }, [router, supabase.auth, user]);
 
   const handleSignOut = useCallback(() => {
     supabase.auth.signOut();
