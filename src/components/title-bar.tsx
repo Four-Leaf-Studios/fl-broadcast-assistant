@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { WebviewWindow } from "@tauri-apps/api/window";
 import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
 import { relaunch } from "@tauri-apps/api/process";
-import { modifyLinks, openExternal } from "@/lib/utils";
+import { modifyLinks } from "@/lib/utils";
 import { marked } from "marked";
+import useSiteWindow from "./hooks/useSiteWindow";
 
 const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
   return (
@@ -19,17 +19,8 @@ const TitleBarButton = ({ src = "", onClick }: { onClick: any; src: any }) => {
 };
 
 const TitleBar = () => {
-  const [appWindow, setAppWindow] = useState<WebviewWindow>();
   const [manifest, setManifest] = useState<any>();
-
-  const setupAppWindow = async () => {
-    const appWindow = (await import("@tauri-apps/api/window")).appWindow;
-    setAppWindow(appWindow);
-  };
-
-  useEffect(() => {
-    setupAppWindow();
-  }, []);
+  const { appWindow } = useSiteWindow();
 
   const windowMinimize = () => appWindow?.minimize();
   const windowMaximize = () => appWindow?.maximize();
